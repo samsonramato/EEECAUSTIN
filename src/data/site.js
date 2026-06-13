@@ -77,19 +77,28 @@ export const aboutMission = [
   'Equip believers to fulfill their God-given purpose and calling.',
 ]
 
-// Hero slideshow images
-export const heroImages = [
-  '/image/hero-bg.jpg',
+// All congregation photos (verified to exist on disk)
+export const galleryImages = [
   '/image/photo1.jpg',
   '/image/photo2.png',
   '/image/photo3.png',
-  '/image/photo4.png',
+  '/image/photo4.jpg',
   '/image/photo5.jpg',
   '/image/photo6.jpg',
-  '/image/photo7.jpg',
+  '/image/photo7.png',
   '/image/photo8.jpg',
-  '/image/photo9.png',
+  '/image/photo9.jpg',
   '/image/photo10.jpg',
-  '/image/photo11.jpg',
-  '/image/photo12.jpg',
+  '/image/prayer.png',
+]
+
+// Hero slideshow images (hero background + every gallery photo)
+export const heroImages = ['/image/hero-bg.jpg', ...galleryImages]
+
+// Core values strip
+export const values = [
+  { icon: 'fa-dove', title: 'Worship', desc: 'Encountering God together in spirit and truth.' },
+  { icon: 'fa-people-group', title: 'Fellowship', desc: 'A loving family rooted in Christ and community.' },
+  { icon: 'fa-book-bible', title: 'Discipleship', desc: 'Growing in the Word and walking in faith.' },
+  { icon: 'fa-hand-holding-heart', title: 'Service', desc: 'Sharing God’s love with Austin and beyond.' },
 ]

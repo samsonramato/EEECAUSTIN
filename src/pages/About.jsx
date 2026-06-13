@@ -1,6 +1,11 @@
 import { useEffect } from 'react'
 import PageHero from '../components/PageHero.jsx'
+import Reveal from '../components/Reveal.jsx'
+import VisitCTA from '../components/VisitCTA.jsx'
 import { aboutMission } from '../data/site.js'
+
+const headingClass =
+  'relative mb-4 pb-3 font-serif text-2xl text-navy after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-12 after:rounded after:bg-gold'
 
 export default function About() {
   useEffect(() => {
@@ -13,10 +18,8 @@ export default function About() {
       <PageHero eyebrow="Get to know us" title="About Our Church" />
 
       <div className="container-wide -mt-14 grid grid-cols-1 gap-7 pb-[clamp(40px,6vw,70px)] md:grid-cols-2 lg:grid-cols-3">
-        <section className="card relative z-[5] p-[clamp(24px,3vw,34px)]">
-          <h2 className="relative mb-4 pb-3 font-serif text-2xl text-navy after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-12 after:rounded after:bg-gold">
-            About Us
-          </h2>
+        <Reveal className="card relative z-[5] p-[clamp(24px,3vw,34px)]">
+          <h2 className={headingClass}>About Us</h2>
           <p className="mb-3.5 text-muted">
             <span className="font-serif font-bold text-navy">
               Ethiopian Emmanuel Evangelical Church in Austin, Texas,
@@ -32,22 +35,18 @@ export default function About() {
             grow in faith, engage in meaningful ministry, and develop lasting relationships
             rooted in Christ.
           </p>
-        </section>
+        </Reveal>
 
-        <section className="card relative z-[5] p-[clamp(24px,3vw,34px)]">
-          <h2 className="relative mb-4 pb-3 font-serif text-2xl text-navy after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-12 after:rounded after:bg-gold">
-            Our Vision
-          </h2>
+        <Reveal delay={120} className="card relative z-[5] p-[clamp(24px,3vw,34px)]">
+          <h2 className={headingClass}>Our Vision</h2>
           <p className="text-muted">
             To be a beacon of hope and transformation in our community by sharing the
             Gospel and living out the teachings of Christ in every aspect of our lives.
           </p>
-        </section>
+        </Reveal>
 
-        <section className="card relative z-[5] p-[clamp(24px,3vw,34px)]">
-          <h2 className="relative mb-4 pb-3 font-serif text-2xl text-navy after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-12 after:rounded after:bg-gold">
-            Our Mission
-          </h2>
+        <Reveal delay={240} className="card relative z-[5] p-[clamp(24px,3vw,34px)]">
+          <h2 className={headingClass}>Our Mission</h2>
           <ul className="space-y-3">
             {aboutMission.map((item) => (
               <li key={item} className="relative pl-7 text-muted">
@@ -56,8 +55,10 @@ export default function About() {
               </li>
             ))}
           </ul>
-        </section>
+        </Reveal>
       </div>
+
+      <VisitCTA />
     </>
   )
 }

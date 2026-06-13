@@ -140,6 +140,55 @@
   animation: rise 0.9s var(--ease-soft) both;
 }
 
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.7s var(--ease-soft), transform 0.7s var(--ease-soft);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Soft floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Bouncing scroll-down hint */
+@keyframes scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+.animate-scroll-hint {
+  animation: scroll-hint 1.8s ease-in-out infinite;
+}
+
+/* Decorative gradient text */
+.text-gradient-gold {
+  background: linear-gradient(120deg, var(--color-gold), var(--color-gold-dark));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Subtle section background pattern */
+.bg-soft-pattern {
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(20, 35, 59, 0.05) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+
 /* Hero slideshow transitions (applied to .hero-bg layer) */
 .t-fade { animation: t-fade 5s forwards; }
 .t-zoom-in { animation: t-zoom-in 5s forwards; }

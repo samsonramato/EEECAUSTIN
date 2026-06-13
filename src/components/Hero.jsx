@@ -53,6 +53,17 @@ export default function Hero() {
           </Link>
         </div>
       </div>
+
+      {/* Scroll hint */}
+      <a
+        href="#welcome"
+        aria-label="Scroll to content"
+        className="absolute bottom-6 left-1/2 z-[3] -translate-x-1/2 text-white/80 hover:text-gold"
+      >
+        <span className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-white/60 p-1.5">
+          <span className="block h-2 w-1 rounded-full bg-white animate-scroll-hint" />
+        </span>
+      </a>
     </section>
   )
 }
