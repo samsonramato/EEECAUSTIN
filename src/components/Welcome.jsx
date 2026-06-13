@@ -44,7 +44,7 @@ export default function Welcome() {
 
         <div className="mt-8 grid grid-cols-3 gap-4">
           {[
-            { num: '20+', label: 'Years serving' },
+            { num: '2+', label: 'Years serving' },
             { num: '2', label: 'Languages' },
             { num: '100%', label: 'Welcome' },
           ].map((s) => (
