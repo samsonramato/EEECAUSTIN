@@ -4,7 +4,6 @@ import Hero from '../components/Hero.jsx'
 import Welcome from '../components/Welcome.jsx'
 import Values from '../components/Values.jsx'
 import Gallery from '../components/Gallery.jsx'
-import FacebookVideos from '../components/FacebookVideos.jsx'
 import VisitCTA from '../components/VisitCTA.jsx'
 import ServiceTimes from '../components/ServiceTimes.jsx'
 import Reveal from '../components/Reveal.jsx'
@@ -120,8 +119,6 @@ export default function Home() {
           </div>
         </Reveal>
       </section>
-
-      <FacebookVideos />
 
       <VisitCTA />
     </>

@@ -27,8 +27,9 @@ const spanFor = (i) => {
 }
 
 export default function Gallery() {
-  const [active, setActive] = useState(null) // index into items, or null
-  const { photos: fbPhotos, configured } = useFacebookMedia()
+  const [tab, setTab] = useState('photos') // 'photos' | 'videos'
+  const [active, setActive] = useState(null) // index into photo items, or null
+  const { photos: fbPhotos, videos, configured } = useFacebookMedia()
 
   // Prefer live Facebook photos; otherwise show local images.
   const items =
@@ -43,6 +44,8 @@ export default function Gallery() {
           thumb: src,
           caption: localCaptions[i % localCaptions.length],
         }))
+
+  const hasVideos = videos.length > 0
 
   const close = useCallback(() => setActive(null), [])
   const next = useCallback(
@@ -93,47 +96,105 @@ export default function Gallery() {
         )}
       </Reveal>
 
-      {/* Editorial mosaic */}
-      <div className="mt-12 grid auto-rows-[150px] grid-flow-dense grid-cols-2 gap-3 sm:auto-rows-[180px] sm:grid-cols-3 sm:gap-4 lg:auto-rows-[210px] lg:grid-cols-4">
-        {items.map((item, i) => (
-          <Reveal
-            key={item.full + i}
-            delay={(i % 4) * 70}
-            className={`group relative overflow-hidden rounded-2xl ${spanFor(i)}`}
-          >
-            <button
-              type="button"
-              onClick={() => setActive(i)}
-              aria-label={`View photo: ${item.caption}`}
-              className="relative block h-full w-full"
-            >
-              <img
-                src={item.thumb}
-                alt={item.caption}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-[900ms] ease-soft group-hover:scale-110"
-              />
-              {/* ring + gradient */}
-              <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
-              <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-              {/* expand pill */}
-              <span className="absolute right-3 top-3 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-white/90 text-navy opacity-0 shadow-md backdrop-blur transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                <i className="fas fa-expand text-sm" />
-              </span>
-
-              {/* caption */}
-              <span className="absolute inset-x-0 bottom-0 translate-y-2 p-4 text-left opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                <span className="font-serif text-[0.98rem] font-semibold text-white drop-shadow line-clamp-1">
-                  {item.caption}
+      {/* Photos / Videos toggle — only shown when videos are available */}
+      {hasVideos && (
+        <Reveal className="mt-8 flex justify-center">
+          <div className="inline-flex rounded-full border border-line bg-white p-1 shadow-sm">
+            {[
+              { key: 'photos', label: 'Photos', icon: 'fa-images', count: items.length },
+              { key: 'videos', label: 'Videos', icon: 'fa-play', count: videos.length },
+            ].map((t) => (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => setTab(t.key)}
+                className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${
+                  tab === t.key
+                    ? 'bg-gold text-navy shadow-[0_6px_18px_rgba(201,162,75,0.35)]'
+                    : 'text-muted hover:text-navy'
+                }`}
+              >
+                <i className={`fas ${t.icon}`} />
+                {t.label}
+                <span
+                  className={`rounded-full px-1.5 text-xs ${
+                    tab === t.key ? 'bg-navy/10 text-navy' : 'bg-cream text-muted'
+                  }`}
+                >
+                  {t.count}
                 </span>
-              </span>
-            </button>
-          </Reveal>
-        ))}
-      </div>
+              </button>
+            ))}
+          </div>
+        </Reveal>
+      )}
 
-      {/* Lightbox */}
+      {/* PHOTOS — editorial mosaic */}
+      {tab === 'photos' && (
+        <div className="mt-12 grid auto-rows-[150px] grid-flow-dense grid-cols-2 gap-3 sm:auto-rows-[180px] sm:grid-cols-3 sm:gap-4 lg:auto-rows-[210px] lg:grid-cols-4">
+          {items.map((item, i) => (
+            <Reveal
+              key={item.full + i}
+              delay={(i % 4) * 70}
+              className={`group relative overflow-hidden rounded-2xl ${spanFor(i)}`}
+            >
+              <button
+                type="button"
+                onClick={() => setActive(i)}
+                aria-label={`View photo: ${item.caption}`}
+                className="relative block h-full w-full"
+              >
+                <img
+                  src={item.thumb}
+                  alt={item.caption}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-[900ms] ease-soft group-hover:scale-110"
+                />
+                <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
+                <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <span className="absolute right-3 top-3 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-white/90 text-navy opacity-0 shadow-md backdrop-blur transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <i className="fas fa-expand text-sm" />
+                </span>
+                <span className="absolute inset-x-0 bottom-0 translate-y-2 p-4 text-left opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <span className="font-serif text-[0.98rem] font-semibold text-white drop-shadow line-clamp-1">
+                    {item.caption}
+                  </span>
+                </span>
+              </button>
+            </Reveal>
+          ))}
+        </div>
+      )}
+
+      {/* VIDEOS — Facebook embeds */}
+      {tab === 'videos' && hasVideos && (
+        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {videos.map((v, i) => (
+            <Reveal key={v.id} delay={(i % 3) * 90}>
+              <div className="card overflow-hidden p-2.5">
+                <div className="relative w-full overflow-hidden rounded-lg" style={{ aspectRatio: '16 / 9' }}>
+                  <iframe
+                    title={v.title || `Facebook video ${i + 1}`}
+                    src={`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+                      v.permalink,
+                    )}&show_text=false&autoplay=false`}
+                    className="absolute inset-0 h-full w-full border-0"
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+                {v.title && (
+                  <p className="px-2 py-3 text-center font-serif text-[0.98rem] text-navy line-clamp-2">
+                    {v.title}
+                  </p>
+                )}
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      )}
+
+      {/* Lightbox (photos only) */}
       {active !== null && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-navy/95 p-4 backdrop-blur-md animate-rise"
@@ -141,7 +202,6 @@ export default function Gallery() {
           role="dialog"
           aria-modal="true"
         >
-          {/* close */}
           <button
             className="absolute right-5 top-5 z-[2] flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl text-white transition hover:bg-gold hover:text-navy"
             aria-label="Close"
@@ -149,8 +209,6 @@ export default function Gallery() {
           >
             <i className="fas fa-xmark" />
           </button>
-
-          {/* prev */}
           <button
             className="absolute left-4 top-1/2 z-[2] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-xl text-white transition hover:bg-gold hover:text-navy sm:left-8"
             aria-label="Previous photo"
@@ -161,8 +219,6 @@ export default function Gallery() {
           >
             <i className="fas fa-chevron-left" />
           </button>
-
-          {/* next */}
           <button
             className="absolute right-4 top-1/2 z-[2] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-xl text-white transition hover:bg-gold hover:text-navy sm:right-8"
             aria-label="Next photo"
@@ -173,8 +229,6 @@ export default function Gallery() {
           >
             <i className="fas fa-chevron-right" />
           </button>
-
-          {/* image + caption */}
           <figure className="flex max-h-full max-w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
             <img
               src={items[active].full}
