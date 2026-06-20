@@ -26,7 +26,7 @@ export default function TopBar() {
           <a href="#" aria-label="Instagram" className="hover:text-gold transition-colors">
             <i className="fab fa-instagram" />
           </a>
-          <a href="#" aria-label="YouTube" className="hover:text-gold transition-colors">
+          <a href={contact.youtube} target="_blank" rel="noreferrer" aria-label="YouTube" className="hover:text-gold transition-colors">
             <i className="fab fa-youtube" />
           </a>
         </div>

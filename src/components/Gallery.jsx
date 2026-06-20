@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Reveal from './Reveal.jsx'
 import { galleryImages } from '../data/site.js'
 import { useFacebookMedia } from '../hooks/useFacebookMedia.js'
 
-// Gentle, repeating tilt pattern so the wall feels playful but tidy
-const tilts = ['-rotate-2', 'rotate-1', '-rotate-1', 'rotate-2', 'rotate-0', '-rotate-1']
 const localCaptions = [
   'Sunday worship',
   'In His presence',
@@ -19,15 +17,18 @@ const localCaptions = [
   'Lifting hands',
 ]
 
-export default function Gallery() {
-  const [active, setActive] = useState(null)
-  const { photos: fbPhotos, configured } = useFacebookMedia()
+// Repeating mosaic rhythm: a couple of larger "feature" tiles among the rest.
+// grid-flow-dense fills any gaps so it stays tidy for any photo count.
+const spanFor = (i) => {
+  const m = i % 6
+  if (m === 0) return 'sm:col-span-2 sm:row-span-2'
+  if (m === 4) return 'lg:row-span-2'
+  return ''
+}
 
-  useEffect(() => {
-    const onKey = (e) => e.key === 'Escape' && setActive(null)
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
+export default function Gallery() {
+  const [active, setActive] = useState(null) // index into items, or null
+  const { photos: fbPhotos, configured } = useFacebookMedia()
 
   // Prefer live Facebook photos; otherwise show local images.
   const items =
@@ -42,6 +43,33 @@ export default function Gallery() {
           thumb: src,
           caption: localCaptions[i % localCaptions.length],
         }))
+
+  const close = useCallback(() => setActive(null), [])
+  const next = useCallback(
+    () => setActive((a) => (a === null ? a : (a + 1) % items.length)),
+    [items.length],
+  )
+  const prev = useCallback(
+    () => setActive((a) => (a === null ? a : (a - 1 + items.length) % items.length)),
+    [items.length],
+  )
+
+  // Keyboard nav + body scroll lock while the lightbox is open.
+  useEffect(() => {
+    if (active === null) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') close()
+      else if (e.key === 'ArrowRight') next()
+      else if (e.key === 'ArrowLeft') prev()
+    }
+    window.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [active, close, next, prev])
 
   return (
     <section className="container-wide py-[clamp(48px,7vw,84px)]">
@@ -65,29 +93,40 @@ export default function Gallery() {
         )}
       </Reveal>
 
-      {/* Polaroid masonry wall */}
-      <div className="mt-12 [column-fill:_balance] columns-2 gap-5 sm:columns-3 lg:columns-4">
+      {/* Editorial mosaic */}
+      <div className="mt-12 grid auto-rows-[150px] grid-flow-dense grid-cols-2 gap-3 sm:auto-rows-[180px] sm:grid-cols-3 sm:gap-4 lg:auto-rows-[210px] lg:grid-cols-4">
         {items.map((item, i) => (
-          <Reveal key={item.full + i} delay={(i % 4) * 80} className="mb-6 break-inside-avoid">
+          <Reveal
+            key={item.full + i}
+            delay={(i % 4) * 70}
+            className={`group relative overflow-hidden rounded-2xl ${spanFor(i)}`}
+          >
             <button
               type="button"
-              onClick={() => setActive(item.full)}
-              className={`group block w-full rounded-[14px] bg-white p-2.5 pb-9 shadow-[0_10px_30px_rgba(20,35,59,0.12)] ring-1 ring-line transition-all duration-300 hover:z-10 hover:rotate-0 hover:shadow-[0_22px_50px_rgba(20,35,59,0.22)] ${tilts[i % tilts.length]}`}
+              onClick={() => setActive(i)}
+              aria-label={`View photo: ${item.caption}`}
+              className="relative block h-full w-full"
             >
-              <span className="relative block overflow-hidden rounded-[8px]">
-                <img
-                  src={item.thumb}
-                  alt={item.caption}
-                  loading="lazy"
-                  className="w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <span className="absolute right-2.5 top-2.5 flex h-9 w-9 scale-0 items-center justify-center rounded-full bg-white/90 text-rose-400 shadow transition-transform duration-300 group-hover:scale-100">
-                  <i className="fas fa-heart" />
-                </span>
-                <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <img
+                src={item.thumb}
+                alt={item.caption}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-[900ms] ease-soft group-hover:scale-110"
+              />
+              {/* ring + gradient */}
+              <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
+              <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+              {/* expand pill */}
+              <span className="absolute right-3 top-3 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-white/90 text-navy opacity-0 shadow-md backdrop-blur transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                <i className="fas fa-expand text-sm" />
               </span>
-              <span className="mt-2.5 block text-center font-serif text-[0.95rem] italic text-navy/70 line-clamp-1">
-                {item.caption}
+
+              {/* caption */}
+              <span className="absolute inset-x-0 bottom-0 translate-y-2 p-4 text-left opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                <span className="font-serif text-[0.98rem] font-semibold text-white drop-shadow line-clamp-1">
+                  {item.caption}
+                </span>
               </span>
             </button>
           </Reveal>
@@ -95,26 +134,61 @@ export default function Gallery() {
       </div>
 
       {/* Lightbox */}
-      {active && (
+      {active !== null && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy/90 p-4 backdrop-blur-sm animate-rise"
-          onClick={() => setActive(null)}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy/95 p-4 backdrop-blur-md animate-rise"
+          onClick={close}
           role="dialog"
           aria-modal="true"
         >
+          {/* close */}
           <button
-            className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl text-white transition hover:bg-gold hover:text-navy"
+            className="absolute right-5 top-5 z-[2] flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl text-white transition hover:bg-gold hover:text-navy"
             aria-label="Close"
-            onClick={() => setActive(null)}
+            onClick={close}
           >
             <i className="fas fa-xmark" />
           </button>
-          <img
-            src={active}
-            alt="Enlarged church photo"
-            className="max-h-[88vh] max-w-[92vw] rounded-xl bg-white p-2 object-contain shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
+
+          {/* prev */}
+          <button
+            className="absolute left-4 top-1/2 z-[2] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-xl text-white transition hover:bg-gold hover:text-navy sm:left-8"
+            aria-label="Previous photo"
+            onClick={(e) => {
+              e.stopPropagation()
+              prev()
+            }}
+          >
+            <i className="fas fa-chevron-left" />
+          </button>
+
+          {/* next */}
+          <button
+            className="absolute right-4 top-1/2 z-[2] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-xl text-white transition hover:bg-gold hover:text-navy sm:right-8"
+            aria-label="Next photo"
+            onClick={(e) => {
+              e.stopPropagation()
+              next()
+            }}
+          >
+            <i className="fas fa-chevron-right" />
+          </button>
+
+          {/* image + caption */}
+          <figure className="flex max-h-full max-w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={items[active].full}
+              alt={items[active].caption}
+              className="max-h-[80vh] max-w-[92vw] rounded-xl bg-white object-contain p-1.5 shadow-2xl"
+            />
+            <figcaption className="mt-4 flex items-center gap-3 text-sm text-white/80">
+              <span className="font-serif italic">{items[active].caption}</span>
+              <span className="text-white/40">·</span>
+              <span className="tabular-nums text-white/60">
+                {active + 1} / {items.length}
+              </span>
+            </figcaption>
+          </figure>
         </div>
       )}
     </section>

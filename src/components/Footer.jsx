@@ -57,7 +57,9 @@ export default function Footer() {
               <i className="fab fa-instagram" />
             </a>
             <a
-              href="#"
+              href={contact.youtube}
+              target="_blank"
+              rel="noreferrer"
               aria-label="YouTube"
               className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 border border-white/15 text-white transition hover:bg-gold hover:text-navy hover:-translate-y-1"
             >

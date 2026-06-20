@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Reveal from './Reveal.jsx'
+import StatCounter from './StatCounter.jsx'
 
 export default function Welcome() {
   return (
@@ -49,7 +50,7 @@ export default function Welcome() {
             { num: '100%', label: 'Welcome' },
           ].map((s) => (
             <div key={s.label} className="rounded-xl border border-line bg-white px-3 py-4 text-center shadow-sm">
-              <div className="font-serif text-2xl font-bold text-gold-dark">{s.num}</div>
+              <StatCounter value={s.num} className="font-serif text-2xl font-bold text-gold-dark" />
               <div className="mt-1 text-xs font-medium text-muted">{s.label}</div>
             </div>
           ))}

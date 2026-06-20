@@ -14,8 +14,80 @@ export const contact = {
   email: 'eeecaustin@gmail.com',
   phones: ['+1 512 701-6531', '+1 512 293-9293'],
   facebook: 'https://www.facebook.com/profile.php?id=100066275576397',
+  youtube: 'https://www.youtube.com/playlist?list=PL8KjhzsBXNmBLJYpihUjrzvkMvov_tvTT',
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3440.847399765715!2d-97.62757402438095!3d30.412071174740625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8644cf8d0895835d%3A0x61455e3592e3b398!2sEthiopian%20Emmanuel%20Evangelical%20Church%20Austin!5e0!3m2!1sen!2sus!4v1742345376271!5m2!1sen!2sus',
+}
+
+// Weekly gatherings — TODO: confirm exact times with the church office before launch.
+export const serviceTimes = [
+  { icon: 'fa-church', day: 'Sunday', name: 'Worship Service', time: '10:00 AM – 12:30 PM', am: 'የእሁድ አምልኮ' },
+  { icon: 'fa-book-bible', day: 'Wednesday', name: 'Bible Study', time: '7:00 PM – 8:30 PM', am: 'የመጽሐፍ ቅዱስ ጥናት' },
+  { icon: 'fa-hands-praying', day: 'Friday', name: 'Prayer Meeting', time: '7:00 PM – 9:00 PM', am: 'የጸሎት ጊዜ' },
+]
+
+// Upcoming events — edit freely; past events can simply be removed.
+export const events = [
+  {
+    title: 'Sunday Worship & Fellowship',
+    am: 'የእሁድ አምልኮና ኅብረት',
+    date: 'Every Sunday',
+    time: '10:00 AM',
+    location: 'Main Sanctuary',
+    desc: 'Gather with the family of God for worship, the Word, and fellowship over coffee afterward.',
+    icon: 'fa-church',
+    recurring: true,
+  },
+  {
+    title: 'Midweek Bible Study',
+    am: 'የመጽሐፍ ቅዱስ ጥናት',
+    date: 'Every Wednesday',
+    time: '7:00 PM',
+    location: 'Fellowship Hall',
+    desc: 'Go deeper into Scripture together with teaching, discussion, and prayer.',
+    icon: 'fa-book-bible',
+    recurring: true,
+  },
+  {
+    title: 'Night of Prayer & Worship',
+    am: 'የጸሎትና የአምልኮ ሌሊት',
+    date: 'Every Friday',
+    time: '7:00 PM',
+    location: 'Main Sanctuary',
+    desc: 'An evening set apart to seek God in prayer, praise, and intercession.',
+    icon: 'fa-hands-praying',
+    recurring: true,
+  },
+]
+
+// Ways to give — update the placeholders with the church's real giving details.
+export const giving = {
+  intro:
+    'Your generosity helps us proclaim the Gospel, serve our community, and care for one another. Every gift, large or small, is a seed sown into the Kingdom of God.',
+  verse: {
+    text: 'Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.',
+    ref: '2 Corinthians 9:7',
+  },
+  methods: [
+    {
+      icon: 'fa-mobile-screen-button',
+      title: 'Give Online',
+      desc: 'Send your tithes and offerings quickly and securely through Zelle using the church email.',
+      detail: 'eeecaustin@gmail.com',
+    },
+    {
+      icon: 'fa-hand-holding-dollar',
+      title: 'In Person',
+      desc: 'Place your gift in the offering during any of our weekly services. All are received with gratitude.',
+      detail: 'During Sunday worship',
+    },
+    {
+      icon: 'fa-envelope-open-text',
+      title: 'By Mail',
+      desc: 'Mail a check made out to Ethiopian Emmanuel Evangelical Church to our address.',
+      detail: '14400 Immanuel Rd, Pflugerville, TX',
+    },
+  ],
 }
 
 // Statement of Faith (home) — Amharic + English
