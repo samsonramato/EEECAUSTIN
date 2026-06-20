@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import Reveal from './Reveal.jsx'
-import StatCounter from './StatCounter.jsx'
 
 export default function Welcome() {
   return (
@@ -42,19 +41,6 @@ export default function Welcome() {
           the Holy Spirit. Whether you are exploring faith for the first time or
           looking for a church home, there is a place for you here.
         </p>
-
-        <div className="mt-8 grid grid-cols-3 gap-4">
-          {[
-            { num: '2+', label: 'Years serving' },
-            { num: '2', label: 'Languages' },
-            { num: '100%', label: 'Welcome' },
-          ].map((s) => (
-            <div key={s.label} className="rounded-xl border border-line bg-white px-3 py-4 text-center shadow-sm">
-              <StatCounter value={s.num} className="font-serif text-2xl font-bold text-gold-dark" />
-              <div className="mt-1 text-xs font-medium text-muted">{s.label}</div>
-            </div>
-          ))}
-        </div>
 
         <div className="mt-8 flex flex-wrap gap-4">
           <Link to="/about" className="btn btn-gold">
