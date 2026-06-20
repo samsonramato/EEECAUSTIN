@@ -26,22 +26,32 @@ const cards = [
 ]
 
 export default function Contact() {
-  const [sent, setSent] = useState(false)
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
 
   useEffect(() => {
     document.title =
       'Contact — Ethiopian Emmanuel Evangelical Church Austin | Gospel & Evangelical Community'
   }, [])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const data = new FormData(e.currentTarget)
-    const subject = encodeURIComponent(`Website message from ${data.get('name') || 'a visitor'}`)
-    const body = encodeURIComponent(
-      `Name: ${data.get('name')}\nEmail: ${data.get('email')}\nPhone: ${data.get('phone')}\n\n${data.get('message')}`,
-    )
-    window.location.href = `mailto:${contact.email}?subject=${subject}&body=${body}`
-    setSent(true)
+    const form = e.currentTarget
+    const data = new FormData(form)
+    data.append('form-name', 'contact')
+
+    setStatus('sending')
+    try {
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data).toString(),
+      })
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`)
+      form.reset()
+      setStatus('sent')
+    } catch (err) {
+      setStatus('error')
+    }
   }
 
   const fieldClass =
@@ -84,7 +94,22 @@ export default function Contact() {
               the form and we’ll get back to you.
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-7 space-y-4">
+            <form
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              onSubmit={handleSubmit}
+              className="mt-7 space-y-4"
+            >
+              {/* Netlify form plumbing */}
+              <input type="hidden" name="form-name" value="contact" />
+              <p className="hidden">
+                <label>
+                  Don’t fill this out if you’re human: <input name="bot-field" />
+                </label>
+              </p>
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <input name="name" required placeholder="Your name" className={fieldClass} />
                 <input name="email" type="email" required placeholder="Email address" className={fieldClass} />
@@ -97,14 +122,28 @@ export default function Contact() {
                 placeholder="How can we pray for you or help?"
                 className={fieldClass}
               />
-              <button type="submit" className="btn btn-gold w-full sm:w-auto">
-                <i className="fas fa-paper-plane" />
-                Send Message
+              <button
+                type="submit"
+                disabled={status === 'sending'}
+                className="btn btn-gold w-full disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+              >
+                <i className={`fas ${status === 'sending' ? 'fa-spinner fa-spin' : 'fa-paper-plane'}`} />
+                {status === 'sending' ? 'Sending…' : 'Send Message'}
               </button>
-              {sent && (
+              {status === 'sent' && (
                 <p className="flex items-center gap-2 text-sm font-medium text-gold-dark">
                   <i className="fas fa-circle-check" />
-                  Your email app should open with the message ready to send.
+                  Thank you! Your message has been sent to the church. We’ll be in touch soon.
+                </p>
+              )}
+              {status === 'error' && (
+                <p className="flex items-center gap-2 text-sm font-medium text-red-600">
+                  <i className="fas fa-triangle-exclamation" />
+                  Something went wrong. Please email us directly at{' '}
+                  <a href={`mailto:${contact.email}`} className="underline">
+                    {contact.email}
+                  </a>
+                  .
                 </p>
               )}
             </form>
