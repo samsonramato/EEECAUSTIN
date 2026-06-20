@@ -69,6 +69,15 @@ export default function Gallery() {
     else photoGroups.push({ key, label: item.date ? fmtDate(item.date) : '', photos: [{ ...item, index }] })
   })
 
+  // Same date grouping for videos (already newest-first from the API).
+  const videoGroups = []
+  videos.forEach((v) => {
+    const key = v.date ? v.date.slice(0, 10) : 'undated'
+    const last = videoGroups[videoGroups.length - 1]
+    if (last && last.key === key) last.videos.push(v)
+    else videoGroups.push({ key, label: v.date ? fmtDate(v.date) : '', videos: [v] })
+  })
+
   const close = useCallback(() => setActive(null), [])
   const next = useCallback(
     () => setActive((a) => (a === null ? a : (a + 1) % items.length)),
@@ -207,36 +216,49 @@ export default function Gallery() {
         </div>
       )}
 
-      {/* VIDEOS — Facebook embeds */}
+      {/* VIDEOS — grouped by date, each date its own category */}
       {tab === 'videos' && hasVideos && (
-        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {videos.map((v, i) => (
-            <Reveal key={v.id} delay={(i % 3) * 90}>
-              <div className="card overflow-hidden p-2.5">
-                <div className="relative w-full overflow-hidden rounded-lg" style={{ aspectRatio: '16 / 9' }}>
-                  <iframe
-                    title={v.title || `Facebook video ${i + 1}`}
-                    src={`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
-                      v.permalink,
-                    )}&show_text=false&autoplay=false`}
-                    className="absolute inset-0 h-full w-full border-0"
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-                <div className="px-2 py-3 text-center">
-                  {v.title && (
-                    <p className="font-serif text-[0.98rem] text-navy line-clamp-2">{v.title}</p>
-                  )}
-                  {v.date && (
-                    <p className="mt-1 text-xs font-medium text-gold-dark">
-                      <i className="fas fa-calendar-day mr-1" />
-                      {fmtDate(v.date)}
-                    </p>
-                  )}
-                </div>
+        <div className="mt-10 space-y-14">
+          {videoGroups.map((group) => (
+            <div key={group.key}>
+              {group.label && (
+                <Reveal className="mb-6 flex items-center gap-4">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-sm font-semibold text-white shadow-sm">
+                    <i className="fas fa-calendar-day text-gold" />
+                    {group.label}
+                  </span>
+                  <span className="text-sm font-medium text-muted">
+                    {group.videos.length} {group.videos.length === 1 ? 'video' : 'videos'}
+                  </span>
+                  <span className="h-px flex-1 bg-line" />
+                </Reveal>
+              )}
+
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {group.videos.map((v, i) => (
+                  <Reveal key={v.id} delay={(i % 3) * 90}>
+                    <div className="card overflow-hidden p-2.5">
+                      <div className="relative w-full overflow-hidden rounded-lg" style={{ aspectRatio: '16 / 9' }}>
+                        <iframe
+                          title={v.title || `Facebook video ${i + 1}`}
+                          src={`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+                            v.permalink,
+                          )}&show_text=false&autoplay=false`}
+                          className="absolute inset-0 h-full w-full border-0"
+                          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                          allowFullScreen
+                        />
+                      </div>
+                      {v.title && (
+                        <p className="px-2 py-3 text-center font-serif text-[0.98rem] text-navy line-clamp-2">
+                          {v.title}
+                        </p>
+                      )}
+                    </div>
+                  </Reveal>
+                ))}
               </div>
-            </Reveal>
+            </div>
           ))}
         </div>
       )}
