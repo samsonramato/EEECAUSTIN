@@ -40,20 +40,33 @@ export const handler = async () => {
     const pData = await pRes.json()
     const vData = await vRes.json()
 
+    // Newest first: sort by created_time descending (don't trust API order).
+    const byNewest = (a, b) => new Date(b.created_time || 0) - new Date(a.created_time || 0)
+
     const photos = (pData.data || [])
+      .slice()
+      .sort(byNewest)
       .map((p) => {
         const imgs = p.images || []
         const best = imgs[0]?.source
         const thumb = imgs.find((i) => i.width && i.width <= 720)?.source || best
-        return { id: p.id, src: best, thumb, caption: p.name || '' }
+        return { id: p.id, src: best, thumb, caption: p.name || '', date: p.created_time || null }
       })
       .filter((p) => p.src)
 
     const videos = (vData.data || [])
+      .slice()
+      .sort(byNewest)
       .map((v) => {
         const path = v.permalink_url || ''
         const permalink = path.startsWith('http') ? path : `https://www.facebook.com${path}`
-        return { id: v.id, permalink, title: v.title || v.description || '', picture: v.picture || '' }
+        return {
+          id: v.id,
+          permalink,
+          title: v.title || v.description || '',
+          picture: v.picture || '',
+          date: v.created_time || null,
+        }
       })
       .filter((v) => v.permalink)
 

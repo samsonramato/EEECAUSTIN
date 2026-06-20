@@ -17,6 +17,15 @@ const localCaptions = [
   'Lifting hands',
 ]
 
+// "2026-06-15T03:23:21+0000" -> "Jun 15, 2026"
+const fmtDate = (iso) => {
+  if (!iso) return ''
+  const d = new Date(iso)
+  return Number.isNaN(d.getTime())
+    ? ''
+    : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
 // Repeating mosaic rhythm: a couple of larger "feature" tiles among the rest.
 // grid-flow-dense fills any gaps so it stays tidy for any photo count.
 const spanFor = (i) => {
@@ -38,11 +47,13 @@ export default function Gallery() {
           full: p.src,
           thumb: p.thumb || p.src,
           caption: p.caption || localCaptions[i % localCaptions.length],
+          date: p.date,
         }))
       : galleryImages.map((src, i) => ({
           full: src,
           thumb: src,
           caption: localCaptions[i % localCaptions.length],
+          date: null,
         }))
 
   const hasVideos = videos.length > 0
@@ -156,9 +167,15 @@ export default function Gallery() {
                   <i className="fas fa-expand text-sm" />
                 </span>
                 <span className="absolute inset-x-0 bottom-0 translate-y-2 p-4 text-left opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                  <span className="font-serif text-[0.98rem] font-semibold text-white drop-shadow line-clamp-1">
+                  <span className="block font-serif text-[0.98rem] font-semibold text-white drop-shadow line-clamp-1">
                     {item.caption}
                   </span>
+                  {item.date && (
+                    <span className="mt-0.5 block text-xs font-medium text-gold/90">
+                      <i className="fas fa-calendar-day mr-1" />
+                      {fmtDate(item.date)}
+                    </span>
+                  )}
                 </span>
               </button>
             </Reveal>
@@ -183,11 +200,17 @@ export default function Gallery() {
                     allowFullScreen
                   />
                 </div>
-                {v.title && (
-                  <p className="px-2 py-3 text-center font-serif text-[0.98rem] text-navy line-clamp-2">
-                    {v.title}
-                  </p>
-                )}
+                <div className="px-2 py-3 text-center">
+                  {v.title && (
+                    <p className="font-serif text-[0.98rem] text-navy line-clamp-2">{v.title}</p>
+                  )}
+                  {v.date && (
+                    <p className="mt-1 text-xs font-medium text-gold-dark">
+                      <i className="fas fa-calendar-day mr-1" />
+                      {fmtDate(v.date)}
+                    </p>
+                  )}
+                </div>
               </div>
             </Reveal>
           ))}
@@ -235,8 +258,14 @@ export default function Gallery() {
               alt={items[active].caption}
               className="max-h-[80vh] max-w-[92vw] rounded-xl bg-white object-contain p-1.5 shadow-2xl"
             />
-            <figcaption className="mt-4 flex items-center gap-3 text-sm text-white/80">
+            <figcaption className="mt-4 flex flex-wrap items-center justify-center gap-3 text-sm text-white/80">
               <span className="font-serif italic">{items[active].caption}</span>
+              {items[active].date && (
+                <>
+                  <span className="text-white/40">·</span>
+                  <span className="text-gold/90">{fmtDate(items[active].date)}</span>
+                </>
+              )}
               <span className="text-white/40">·</span>
               <span className="tabular-nums text-white/60">
                 {active + 1} / {items.length}
