@@ -33,7 +33,7 @@ export const handler = async () => {
     `&fields=id,images,name,created_time&limit=24&access_token=${token}`
   const videosUrl =
     `${GRAPH}/${pageId}/videos` +
-    `?fields=id,permalink_url,description,title,picture,created_time&limit=12&access_token=${token}`
+    `?fields=id,permalink_url,description,title,picture,created_time,privacy&limit=24&access_token=${token}`
 
   try {
     const [pRes, vRes] = await Promise.all([fetch(photosUrl), fetch(videosUrl)])
@@ -55,14 +55,19 @@ export const handler = async () => {
       .filter((p) => p.src)
 
     const videos = (vData.data || [])
+      // Only public videos can be shown to visitors; drop "Only me"/friends.
+      .filter((v) => (v.privacy?.value || 'EVERYONE') === 'EVERYONE')
       .slice()
       .sort(byNewest)
       .map((v) => {
         const path = v.permalink_url || ''
         const permalink = path.startsWith('http') ? path : `https://www.facebook.com${path}`
+        // Reels can't be embedded via the video plugin — flag so the UI links out.
+        const isReel = /\/reel\//.test(path)
         return {
           id: v.id,
           permalink,
+          isReel,
           title: v.title || v.description || '',
           picture: v.picture || '',
           date: v.created_time || null,

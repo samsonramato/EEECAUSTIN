@@ -235,28 +235,66 @@ export default function Gallery() {
               )}
 
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {group.videos.map((v, i) => (
-                  <Reveal key={v.id} delay={(i % 3) * 90}>
-                    <div className="card overflow-hidden p-2.5">
-                      <div className="relative w-full overflow-hidden rounded-lg" style={{ aspectRatio: '16 / 9' }}>
-                        <iframe
-                          title={v.title || `Facebook video ${i + 1}`}
-                          src={`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
-                            v.permalink,
-                          )}&show_text=false&autoplay=false`}
-                          className="absolute inset-0 h-full w-full border-0"
-                          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                          allowFullScreen
-                        />
+                {group.videos.map((v, i) =>
+                  v.isReel ? (
+                    // Reels can't be embedded inline — show a poster that opens on Facebook.
+                    <Reveal key={v.id} delay={(i % 3) * 90}>
+                      <a
+                        href={v.permalink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="card group block overflow-hidden p-2.5"
+                      >
+                        <div className="relative w-full overflow-hidden rounded-lg bg-navy" style={{ aspectRatio: '16 / 9' }}>
+                          {v.picture && (
+                            <img
+                              src={v.picture}
+                              alt={v.title || 'Church reel'}
+                              loading="lazy"
+                              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                          )}
+                          <span className="absolute inset-0 bg-navy/35 transition-colors duration-300 group-hover:bg-navy/20" />
+                          <span className="absolute inset-0 flex items-center justify-center">
+                            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-2xl text-navy shadow-lg transition-transform duration-300 group-hover:scale-110">
+                              <i className="fas fa-play ml-1" />
+                            </span>
+                          </span>
+                          <span className="absolute left-2.5 top-2.5 inline-flex items-center gap-1 rounded-full bg-[#1877F2] px-2.5 py-1 text-xs font-semibold text-white shadow">
+                            <i className="fab fa-facebook" />
+                            Reel
+                          </span>
+                        </div>
+                        {v.title && (
+                          <p className="px-2 py-3 text-center font-serif text-[0.98rem] text-navy line-clamp-2">
+                            {v.title}
+                          </p>
+                        )}
+                      </a>
+                    </Reveal>
+                  ) : (
+                    <Reveal key={v.id} delay={(i % 3) * 90}>
+                      <div className="card overflow-hidden p-2.5">
+                        <div className="relative w-full overflow-hidden rounded-lg" style={{ aspectRatio: '16 / 9' }}>
+                          <iframe
+                            title={v.title || `Facebook video ${i + 1}`}
+                            src={`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+                              v.permalink,
+                            )}&show_text=false&autoplay=false`}
+                            className="absolute inset-0 h-full w-full border-0"
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                            allowFullScreen
+                          />
+                        </div>
+                        {v.title && (
+                          <p className="px-2 py-3 text-center font-serif text-[0.98rem] text-navy line-clamp-2">
+                            {v.title}
+                          </p>
+                        )}
                       </div>
-                      {v.title && (
-                        <p className="px-2 py-3 text-center font-serif text-[0.98rem] text-navy line-clamp-2">
-                          {v.title}
-                        </p>
-                      )}
-                    </div>
-                  </Reveal>
-                ))}
+                    </Reveal>
+                  ),
+                )}
               </div>
             </div>
           ))}
