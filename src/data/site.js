@@ -22,8 +22,8 @@ export const contact = {
 // Weekly gatherings — TODO: confirm exact times with the church office before launch.
 export const serviceTimes = [
   { icon: 'fa-church', day: 'Sunday', name: 'Worship Service', time: '10:00 AM – 12:30 PM', am: 'የእሁድ አምልኮ' },
-  { icon: 'fa-book-bible', day: 'Wednesday', name: 'Bible Study', time: '7:00 PM – 8:30 PM', am: 'የመጽሐፍ ቅዱስ ጥናት' },
-  { icon: 'fa-hands-praying', day: 'Friday', name: 'Prayer Meeting', time: '7:00 PM – 9:00 PM', am: 'የጸሎት ጊዜ' },
+  { icon: 'fa-hands-praying', day: 'Wednesday', name: 'Prayer & Worship', time: '7:00 PM – 8:30 PM', am: 'የጸሎትና የአምልኮ' },
+  { icon: 'fa-book-bible', day: 'Friday', name: 'Bible Study', time: '7:00 PM – 9:00 PM', am: 'የመጽሐፍ ቅዱስ ጥናት' },
 ]
 
 // Upcoming events — edit freely; past events can simply be removed.
@@ -39,23 +39,23 @@ export const events = [
     recurring: true,
   },
   {
-    title: 'Midweek Bible Study',
-    am: 'የመጽሐፍ ቅዱስ ጥናት',
+    title: 'Midweek Prayer & Worship',
+    am: 'የጸሎትና የአምልኮ ጊዜ',
     date: 'Every Wednesday',
+    time: '7:00 PM',
+    location: 'Main Sanctuary',
+    desc: 'Gather midweek to seek God together in prayer, praise, and worship.',
+    icon: 'fa-hands-praying',
+    recurring: true,
+  },
+  {
+    title: 'Bible Study',
+    am: 'የመጽሐፍ ቅዱስ ጥናት',
+    date: 'Every Friday',
     time: '7:00 PM',
     location: 'Fellowship Hall',
     desc: 'Go deeper into Scripture together with teaching, discussion, and prayer.',
     icon: 'fa-book-bible',
-    recurring: true,
-  },
-  {
-    title: 'Night of Prayer & Worship',
-    am: 'የጸሎትና የአምልኮ ሌሊት',
-    date: 'Every Friday',
-    time: '7:00 PM',
-    location: 'Main Sanctuary',
-    desc: 'An evening set apart to seek God in prayer, praise, and intercession.',
-    icon: 'fa-hands-praying',
     recurring: true,
   },
 ]
