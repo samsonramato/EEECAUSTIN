@@ -58,6 +58,17 @@ export default function Gallery() {
 
   const hasVideos = videos.length > 0
 
+  // Group photos by calendar day so each date reads as one "event" category.
+  // items are already newest-first, so same-day photos sit consecutively and
+  // each running `index` still maps straight into the flat lightbox order.
+  const photoGroups = []
+  items.forEach((item, index) => {
+    const key = item.date ? item.date.slice(0, 10) : 'undated'
+    const last = photoGroups[photoGroups.length - 1]
+    if (last && last.key === key) last.photos.push({ ...item, index })
+    else photoGroups.push({ key, label: item.date ? fmtDate(item.date) : '', photos: [{ ...item, index }] })
+  })
+
   const close = useCallback(() => setActive(null), [])
   const next = useCallback(
     () => setActive((a) => (a === null ? a : (a + 1) % items.length)),
@@ -140,45 +151,58 @@ export default function Gallery() {
         </Reveal>
       )}
 
-      {/* PHOTOS — editorial mosaic */}
+      {/* PHOTOS — grouped by date, each date its own category */}
       {tab === 'photos' && (
-        <div className="mt-12 grid auto-rows-[150px] grid-flow-dense grid-cols-2 gap-3 sm:auto-rows-[180px] sm:grid-cols-3 sm:gap-4 lg:auto-rows-[210px] lg:grid-cols-4">
-          {items.map((item, i) => (
-            <Reveal
-              key={item.full + i}
-              delay={(i % 4) * 70}
-              className={`group relative overflow-hidden rounded-2xl ${spanFor(i)}`}
-            >
-              <button
-                type="button"
-                onClick={() => setActive(i)}
-                aria-label={`View photo: ${item.caption}`}
-                className="relative block h-full w-full"
-              >
-                <img
-                  src={item.thumb}
-                  alt={item.caption}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-[900ms] ease-soft group-hover:scale-110"
-                />
-                <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
-                <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                <span className="absolute right-3 top-3 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-white/90 text-navy opacity-0 shadow-md backdrop-blur transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                  <i className="fas fa-expand text-sm" />
-                </span>
-                <span className="absolute inset-x-0 bottom-0 translate-y-2 p-4 text-left opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                  <span className="block font-serif text-[0.98rem] font-semibold text-white drop-shadow line-clamp-1">
-                    {item.caption}
+        <div className="mt-10 space-y-14">
+          {photoGroups.map((group) => (
+            <div key={group.key}>
+              {group.label && (
+                <Reveal className="mb-6 flex items-center gap-4">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-sm font-semibold text-white shadow-sm">
+                    <i className="fas fa-calendar-day text-gold" />
+                    {group.label}
                   </span>
-                  {item.date && (
-                    <span className="mt-0.5 block text-xs font-medium text-gold/90">
-                      <i className="fas fa-calendar-day mr-1" />
-                      {fmtDate(item.date)}
-                    </span>
-                  )}
-                </span>
-              </button>
-            </Reveal>
+                  <span className="text-sm font-medium text-muted">
+                    {group.photos.length} {group.photos.length === 1 ? 'photo' : 'photos'}
+                  </span>
+                  <span className="h-px flex-1 bg-line" />
+                </Reveal>
+              )}
+
+              <div className="grid auto-rows-[150px] grid-flow-dense grid-cols-2 gap-3 sm:auto-rows-[180px] sm:grid-cols-3 sm:gap-4 lg:auto-rows-[210px] lg:grid-cols-4">
+                {group.photos.map((item, li) => (
+                  <Reveal
+                    key={item.full + item.index}
+                    delay={(li % 4) * 70}
+                    className={`group relative overflow-hidden rounded-2xl ${spanFor(li)}`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setActive(item.index)}
+                      aria-label={`View photo: ${item.caption}`}
+                      className="relative block h-full w-full"
+                    >
+                      <img
+                        src={item.thumb}
+                        alt={item.caption}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-[900ms] ease-soft group-hover:scale-110"
+                      />
+                      <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
+                      <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      <span className="absolute right-3 top-3 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-white/90 text-navy opacity-0 shadow-md backdrop-blur transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                        <i className="fas fa-expand text-sm" />
+                      </span>
+                      <span className="absolute inset-x-0 bottom-0 translate-y-2 p-4 text-left opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                        <span className="block font-serif text-[0.98rem] font-semibold text-white drop-shadow line-clamp-1">
+                          {item.caption}
+                        </span>
+                      </span>
+                    </button>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       )}
