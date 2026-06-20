@@ -21,7 +21,7 @@ export const contact = {
 
 // Weekly gatherings — TODO: confirm exact times with the church office before launch.
 export const serviceTimes = [
-  { icon: 'fa-church', day: 'Sunday', name: 'Worship Service', time: '10:00 AM – 12:30 PM', am: 'የእሁድ አምልኮ' },
+  { icon: 'fa-church', day: 'Sunday', name: 'Worship Service', time: '1:30 PM – 4:00 PM', am: 'የእሁድ አምልኮ' },
   { icon: 'fa-hands-praying', day: 'Wednesday', name: 'Prayer & Worship', time: '6:30 PM – 7:30 PM', am: 'የጸሎትና የአምልኮ' },
   { icon: 'fa-book-bible', day: 'Friday', name: 'Bible Study', time: '7:00 PM – 9:00 PM', am: 'የመጽሐፍ ቅዱስ ጥናት' },
 ]
@@ -32,7 +32,7 @@ export const events = [
     title: 'Sunday Worship & Fellowship',
     am: 'የእሁድ አምልኮና ኅብረት',
     date: 'Every Sunday',
-    time: '10:00 AM',
+    time: '1:30 PM',
     location: 'Main Sanctuary',
     desc: 'Gather with the family of God for worship, the Word, and fellowship over coffee afterward.',
     icon: 'fa-church',
