@@ -10,7 +10,7 @@ const headingClass =
 export default function About() {
   useEffect(() => {
     document.title =
-      'About — Ethiopian Emmanuel Evangelical Church Austin | Gospel & Evangelical Community'
+      'About — Ethiopian Emmanuel Evangelical Church — Austin | Gospel & Evangelical Community'
   }, [])
 
   return (

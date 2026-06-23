@@ -17,7 +17,7 @@ const sermonsPlaylist =
 export default function Home() {
   useEffect(() => {
     document.title =
-      'Ethiopian Emmanuel Evangelical Church — Austin, Texas | Gospel & Evangelical Community'
+      'Ethiopian Emmanuel Evangelical Church — Austin | Ethiopian & Eritrean Church in Austin, TX'
   }, [])
 
   return (

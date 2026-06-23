@@ -9,7 +9,7 @@ import { services } from '../data/site.js'
 export default function Services() {
   useEffect(() => {
     document.title =
-      'Worship Services — Ethiopian Emmanuel Evangelical Church Austin | Gospel Community'
+      'Worship Services — Ethiopian Emmanuel Evangelical Church — Austin | Gospel Community'
   }, [])
 
   return (

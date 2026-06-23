@@ -30,7 +30,7 @@ export default function Contact() {
 
   useEffect(() => {
     document.title =
-      'Contact — Ethiopian Emmanuel Evangelical Church Austin | Gospel & Evangelical Community'
+      'Contact — Ethiopian Emmanuel Evangelical Church — Austin | Gospel & Evangelical Community'
   }, [])
 
   const handleSubmit = async (e) => {

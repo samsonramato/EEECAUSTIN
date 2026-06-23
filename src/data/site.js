@@ -13,7 +13,7 @@ export const contact = {
   address: '14400 Immanuel Rd, Pflugerville, TX, United States, Texas',
   email: 'eeecaustin@gmail.com',
   phones: ['+1 512 701-6531', '+1 512 293-9293'],
-  facebook: 'https://www.facebook.com/profile.php?id=100066275576397',
+  facebook: 'https://www.facebook.com/EEECAustin',
   youtube: 'https://www.youtube.com/playlist?list=PL8KjhzsBXNmBLJYpihUjrzvkMvov_tvTT',
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3440.847399765715!2d-97.62757402438095!3d30.412071174740625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8644cf8d0895835d%3A0x61455e3592e3b398!2sEthiopian%20Emmanuel%20Evangelical%20Church%20Austin!5e0!3m2!1sen!2sus!4v1742345376271!5m2!1sen!2sus',

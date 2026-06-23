@@ -45,10 +45,10 @@ export default function Navbar() {
             />
             <span className="leading-tight">
               <span className="block font-serif text-lg font-bold text-navy">
-                Emmanuel <span className="text-gold-dark">Evangelical</span>
+                Ethiopian Emmanuel <span className="text-gold-dark">Evangelical</span>
               </span>
               <span className="block text-[0.72rem] font-semibold uppercase tracking-[2px] text-muted">
-                Church · Austin, TX
+                Church — Austin, TX
               </span>
             </span>
           </NavLink>

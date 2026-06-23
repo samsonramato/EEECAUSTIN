@@ -8,7 +8,7 @@ import { events } from '../data/site.js'
 export default function Events() {
   useEffect(() => {
     document.title =
-      'Events — Ethiopian Emmanuel Evangelical Church Austin | Gospel & Evangelical Community'
+      'Events — Ethiopian Emmanuel Evangelical Church — Austin | Gospel & Evangelical Community'
   }, [])
 
   return (

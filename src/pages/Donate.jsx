@@ -8,7 +8,7 @@ import { giving } from '../data/site.js'
 export default function Donate() {
   useEffect(() => {
     document.title =
-      'Give — Ethiopian Emmanuel Evangelical Church Austin | Gospel & Evangelical Community'
+      'Give — Ethiopian Emmanuel Evangelical Church — Austin | Gospel & Evangelical Community'
   }, [])
 
   return (
