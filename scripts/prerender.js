@@ -39,6 +39,13 @@ const routes = [
       'Service times at Ethiopian Emmanuel Evangelical Church in Austin / Pflugerville, TX — Sunday worship, Wednesday prayer, and Friday Bible study. All are welcome.',
   },
   {
+    path: '/visit',
+    file: 'visit.html',
+    title: 'Visit & Directions — Ethiopian Emmanuel Evangelical Church — Austin | Pflugerville, TX',
+    description:
+      'Plan your visit to Ethiopian Emmanuel Evangelical Church in Pflugerville (Austin), TX — address, directions, service times, and what to expect on your first visit. Habesha (Amharic) worship; Eritrean & Ethiopian families welcome.',
+  },
+  {
     path: '/events',
     file: 'events.html',
     title: 'Events — Ethiopian Emmanuel Evangelical Church — Austin | Gospel & Evangelical Community',

@@ -4,6 +4,7 @@ export const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/services', label: 'Services' },
+  { to: '/visit', label: 'Visit' },
   { to: '/events', label: 'Events' },
   { to: '/donate', label: 'Donate' },
   { to: '/contact', label: 'Contact' },
