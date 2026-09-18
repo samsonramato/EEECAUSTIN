@@ -84,6 +84,7 @@ export default function Footer() {
 
       <div className="container-wide border-t border-white/10 py-5.5 text-center text-sm text-white/60">
         <p>&copy; {new Date().getFullYear()} Ethiopian Emmanuel Evangelical Church — Austin. All rights reserved.</p>
+        <p className="mt-1.5 text-white/50">Developed by Abenezer Digitalization &amp; Automation Center</p>
       </div>
     </footer>
   )
